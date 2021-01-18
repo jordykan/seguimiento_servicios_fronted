@@ -1,5 +1,7 @@
 <template>
-  <v-app id="app">
+  <div id="app">
+  <v-app id="inspire">
+    <v-app id="inspire">
       <v-navigation-drawer
         v-model="drawer"
         app
@@ -188,7 +190,7 @@
         
         </v-list>
       </v-navigation-drawer>
-
+     
       <v-app-bar
         app
         clipped-left
@@ -208,29 +210,25 @@
         <v-spacer></v-spacer>
       
       </v-app-bar>
-    <v-content>
-      <v-container
-        fluid
-        fill-height
-      >
-        <v-slide-y-transition mode="out-in">
-          <router-view/>
-        </v-slide-y-transition>
-      </v-container>
-    </v-content>
+  
    
+    </v-app>
   </v-app>
+</div>
 </template>
 
-
 <script>
+import HelloWorld from './components/HelloWorld';
 
 export default {
+  components: { HelloWorld },
   name: 'App',
-  
+  componentes:{
+    HelloWorld
+  },
   data() {
     return{
-        drawer: null,
+          drawer: null,
    
     }
     
