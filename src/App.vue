@@ -9,7 +9,7 @@
             <v-subheader class="grey--text text--darken-1">Desarrollo de Negocios</v-subheader>
           <v-list-item
            
-            link
+            :to="{name:'confirmarServicio'}"
           >
             <v-list-item-action>
               <v-icon>add_task</v-icon>
@@ -149,7 +149,7 @@
                <v-subheader class="grey--text text--darken-1">Administrador</v-subheader>
             <v-list-item
            
-            link
+            :to="{name:'agencias'}"
           >
             <v-list-item-action>
               <v-icon>business</v-icon>

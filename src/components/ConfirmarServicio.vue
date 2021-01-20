@@ -2,14 +2,15 @@
   <v-layout>
     <v-flex>
       <v-data-table
+        dense
         :headers="headers"
-        :items="embarcaciones"
+        :items="agencias"
         :search="search"
         class="elevation-1"
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>Embarcaciones</v-toolbar-title>
+            <v-toolbar-title>Servicios</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-text-field
@@ -31,7 +32,7 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  Nueva Embarcación
+                  Confirmar Servicio
                 </v-btn>
               </template>
               <v-card>
@@ -42,39 +43,34 @@
                 <v-card-text>
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="12" md="12">
                         <v-text-field
                           v-model="name"
-                          label="Nombre"
+                          label="Em"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="12">
                         <v-text-field
-                          v-model="shipowner"
-                          label="Armador"
+                          v-model="address"
+                          label="Dirección"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="12">
                         <v-text-field
-                          v-model="type"
-                          label="Tipo"
+                          v-model="legal_representative"
+                          label="Representante Legal"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="6">
                         <v-text-field
-                          v-model="flag"
-                          label="Bandera"
+                          v-model="rfc"
+                          label="RFC"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="imo" label="IMO"></v-text-field>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-text-field v-model="email" label="Email"></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
-                        <v-text-field
-                          v-model="draft"
-                          label="Calado"
-                        ></v-text-field>
-                      </v-col>
+                 
                     </v-row>
                   </v-container>
                 </v-card-text>
@@ -92,15 +88,15 @@
             </v-dialog>
             <v-dialog v-model="adModal" max-width="290">
                 <v-card-title  v-if="adAccion==1">
-                    Activar Embarcación
+                    Activar Agencia
                 </v-card-title >
                    <v-card-title  v-if="adAccion==2">
-                     Desactivar Embarcación
+                     Desactivar Agencia
                 </v-card-title >
 
                 <v-card-text>
                     Estas a punto de <span v-if="adAccion==1">activar</span><span v-if="adAccion==2">desactivar</span>
-                    la embarcacion {{adNombre}}
+                    la agencia {{adNombre}}
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -119,7 +115,7 @@
           </v-toolbar>
         </template>
         <template v-slot:item.opciones="{ item }">
-               <template>
+        <template>
              <v-icon small class="mr-2" @click="editItem(item)"> edit </v-icon>
         </template>
          <template v-if="item.status==0">
@@ -161,7 +157,7 @@
         </template>
 
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize"> Reset </v-btn>
+          <v-btn color="primary" @click="listar()"> Reset </v-btn>
         </template>
       </v-data-table>
     </v-flex>
@@ -175,19 +171,19 @@ export default {
     return {
       dialog: false,
       dialogDelete: false,
-      search: "",
+      legal_representative: "",
       _id: "",
       name: "",
-      shipowner: "",
-      draft: "",
+      address:'',
+      rfc: "",
+      email: "",
+      search:'',
       adModal:0,
       adAccion:0,
       adNombre:'',
       adId:'',
-      type: "",
-      flag: "",
-      imo: "",
-      embarcaciones: [],
+    
+      agencias: [],
       headers: [
         {
           text: "Opciones",
@@ -195,18 +191,18 @@ export default {
           sortable: false,
           sortable: false,
         },
-        { text: "Nombre", value: "name", sortable: false, sortable: false },
+        { text: "Agencia", value: "name", sortable: false, sortable: false },
         {
-          text: "Armador",
-          value: "shipowner",
+          text: "Direccion",
+          value: "address",
           sortable: false,
           sortable: false,
         },
-        { text: "Tipo", value: "type", sortable: false, sortable: false },
-        { text: "Bandera", value: "flag", sortable: false, sortable: false },
-        { text: "IMO", value: "imo", sortable: false, sortable: false },
-        { text: "Calado", value: "draft", sortable: false, sortable: false },
-        { text: "Estatus", value: "status", sortable: false, sortable: false },
+        { text: "Representante Legal", value: "legal_representative", sortable: false, sortable: false },
+        { text: "RFC", value: "rfc", sortable: false, sortable: false },
+        { text: "Email", value: "email", sortable: false, sortable: false },
+             { text: "Estatus", value: "status", sortable: false, sortable: false },
+
       ],
 
       editedIndex: -1,
@@ -216,7 +212,7 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Nuevo" : "Editar";
+      return this.editedIndex === -1 ? "Confirmar Servicio" : "Editar";
     },
   },
 
@@ -237,21 +233,25 @@ export default {
     listar() {
       let me = this;
       axios
-        .get("boat/list")
+        .get("agency/list")
         .then(function (response) {
-          me.embarcaciones = response.data;
+          me.agencias = response.data;
         })
         .catch(function (error) {
           console.log(errror);
         });
     },
+
+    
+
+
     limpiar() {
       (this._id = ""),
-        (this.shipowner = ""),
-        (this.draft = ""),
-        (this.type = ""),
-        (this.flag = ""),
-        (this.imo = "");
+        (this.name = ""),
+        (this.address = ""),
+        (this.legal_representative = ""),
+        (this.rfc = ""),
+        (this.email = "");
         this.editedIndex = -1
     },
 
@@ -259,14 +259,14 @@ export default {
       let me = this;
       if (this.editedIndex > -1) {
         axios
-          .put("boat/update", {
+          .put("agency/update", {
             '_id':this._id,
             name: this.name,
-            shipowner: this.shipowner,
-            draft: this.draft,
-            type: this.type,
-            flag: this.flag,
-            imo: this.imo,
+            address: this.address,
+            legal_representative: this.legal_representative,
+            rfc: this.rfc,
+            email: this.email
+          
           })
           .then(function (response) {
             me.limpiar();
@@ -279,13 +279,12 @@ export default {
       } else {
         //guardar
         axios
-          .post("boat/add", {
-            name: this.name,
-            shipowner: this.shipowner,
-            draft: this.draft,
-            type: this.type,
-            flag: this.flag,
-            imo: this.imo,
+          .post("agency/add", {
+          name: this.name,
+            address: this.address,
+            legal_representative: this.legal_representative,
+            rfc: this.rfc,
+            email: this.email,
           })
           .then(function (response) {
             me.limpiar();
@@ -298,26 +297,15 @@ export default {
       }
     },
 
-    initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-      ];
-    },
-
+  
     editItem(item) {
       this.name = item.name;
       this._id = item._id;
-      this.shipowner = item.shipowner;
-      this.draft = item.draft;
-      this.type = item.type;
-      this.flag = item.flag;
-      this.imo = item.imo;
+      this.address = item.address;
+      this.legal_representative = item.legal_representative;
+      this.rfc = item.rfc;
+      this.email = item.email;
+      
       this.dialog = true;
       this.editedIndex = 1;
     },
@@ -343,7 +331,7 @@ export default {
       let me = this;
  
       axios
-        .put("boat/activate", { _id: this.adId })
+        .put("agency/activate", { _id: this.adId })
         .then(function(response) {
           (me.adModal = 0),
             (me.adAccion = 0),
@@ -359,7 +347,7 @@ export default {
       let me = this;
       
       axios
-        .put("boat/deactivate", { _id: this.adId })
+        .put("agency/deactivate", { _id: this.adId })
         .then(function(response) {
           (me.adModal = 0),
             (me.adAccion = 0),
@@ -378,24 +366,7 @@ export default {
       this.closeDelete();
     },
 
-    activar(){
-        let me = this;
-
-          axios
-        .put("boat/activate", { _id: this.adId })
-        .then(function(response) {
-          (me.adModal = 0),
-            (me.adAccion = 0),
-            (me.adNombre = ""),
-            (me.adId = ""),
-            me.listar();
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-
-    },
-
+   
     close() {
       this.dialog = false;
     },

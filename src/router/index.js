@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Embarcaciones from '../components/Embarcaciones.vue'
+import Agencias from '../components/Agencias.vue';
+import ConfimarServicio  from '../components/ConfirmarServicio.vue';
 
 Vue.use(VueRouter)
 
@@ -16,6 +18,16 @@ const routes = [
     path: '/embarcaciones',
     name: 'embarcaciones',
     component: Embarcaciones
+  },
+  {
+    path: '/agencias',
+    name: 'agencias',
+    component: Agencias
+  },
+  {
+    path: '/confirmarServicio',
+    name: 'confirmarServicio',
+    component: ConfimarServicio
   },
   {
     path: '/about',
